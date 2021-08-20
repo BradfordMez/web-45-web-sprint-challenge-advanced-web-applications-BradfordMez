@@ -1,17 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+
 
 const Login = () => {
+  const [state, setState] = useState({
+    credentials:{
+      username: "Lambda",
+      password: "School"
+    }
+  });
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
 
-  const error = "";
+  const history = useHistory()
+
+  const handleChange=(e)=>{
+    setState({
+      credentials:{
+        ...state.credentials,
+        [e.target.name]: e.target.value
+      }
+    });
+  };
+
+  const onSubmit =(e)=> {
+    e.preventDefault();
+    axios.post('http://localhost:5000/api/login', state.credentials)
+      .then(res=>{
+        console.log(res.data)
+        localStorage.setItem("token", res.data.payload)
+        history.push('/protected')
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+  }
+
+  const [error, setError] = useState("");
   //replace with error state
 
   return (
     <div>
       <h1>Welcome to the Bubble App!</h1>
       <div data-testid="loginForm" className="login-form">
-        <h2>Build login form here</h2>
+                <form onSubmit={onSubmit}>
+                    <input
+                        type="text"
+                        name="username"
+                        value={state.credentials.username}
+                        id="username"
+                        onChange={handleChange}
+                    />
+                    <p id='error'></p>
+                    <input
+                        type="password"
+                        name="password"
+                        value={state.credentials.password}
+                        id="password"
+                        onChange={handleChange}
+                    />
+                    <p id='error'></p>
+                    <button>Log in</button>
+                </form>
       </div>
 
       <p id="error" className="error">{error}</p>
