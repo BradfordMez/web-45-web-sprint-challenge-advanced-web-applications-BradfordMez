@@ -13,12 +13,14 @@ const BubblePage = () => {
     setEditing(value);
   };
 
+  // const [ editColor, setEditColor] = useState({ color: "", code: { hex: "" }});
+
   const saveEdit = (editColor) => {
     return axiosWithAuth()
     .put(`http://localhost:5000/api/colors/:id`, editColor)
     .then(res=>{
-      console.log(res.data)
-      setColors([...colors])
+      console.log(res.data.id)
+      setColors([...colors.filter(color=>color.id !== res.data.id), res.data])
     })
     .catch(err=>{
       console.log(err)
@@ -29,7 +31,8 @@ const BubblePage = () => {
     return axiosWithAuth()
     .delete('http://localhost:5000/api/colors/:id', colorToDelete)
     .then(res=>{
-      console.log(res.data)
+      console.log(res.config)
+      setColors(colors.filter(color=>color.id !== res.config.id))
     })
     .catch(err=>{
       console.log(err)
