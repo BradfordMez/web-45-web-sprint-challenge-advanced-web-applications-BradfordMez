@@ -32,6 +32,7 @@ const Login = () => {
         history.push('/protected')
       })
       .catch(err=>{
+        setError(err)
         console.log(err)
       })
   }
@@ -50,21 +51,23 @@ const Login = () => {
                         value={state.credentials.username}
                         id="username"
                         onChange={handleChange}
+                        required='required'
                     />
-                    <p id='error'></p>
+                    
                     <input
                         type="password"
                         name="password"
                         value={state.credentials.password}
                         id="password"
                         onChange={handleChange}
+                        required='required'
                     />
-                    <p id='error'></p>
+                    
                     <button>Log in</button>
                 </form>
       </div>
 
-      <p id="error" className="error">{error}</p>
+      {error && (<p id="error" className="error">{"Incorrect Username or Password"}</p>)}
     </div>
   );
 };
