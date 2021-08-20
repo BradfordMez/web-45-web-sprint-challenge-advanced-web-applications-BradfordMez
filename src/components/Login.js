@@ -28,7 +28,6 @@ const Login = () => {
     e.preventDefault();
     axios.post('http://localhost:5000/api/login', state.credentials)
       .then(res=>{
-        console.log(res.data)
         localStorage.setItem("token", res.data.payload)
         history.push('/protected')
       })
